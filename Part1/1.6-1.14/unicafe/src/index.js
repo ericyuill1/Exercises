@@ -8,7 +8,6 @@ const Button = (props) => (
 )
 
 const Statistic = (props) => {
-
   return (
     <div>
       {props.text} {props.value}
@@ -17,7 +16,6 @@ const Statistic = (props) => {
 }
 
 const Statistics = (props) => {
-
   if (props.good + props.neutral + props.bad === 0) {
     return (
     <div>
