@@ -1,15 +1,47 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const App = (props) => {
+const Button = (props) => (
+  <button onClick = {props.handleClick}>
+    {props.text}
+  </button>
+)
+
+const App = () => {
 
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(Array(6).fill(0))
 
   const copy = [...points]
 
+  const Display1 = () => {
+    return (
+      <div>
+        <h1>
+          Anecdote of the day
+        </h1>
+        <p>
+          {anecdotes[selected]}
+        </p>
+        <p>
+          has {points[selected]} votes
+        </p>
+      </div>
+    )
+  }
+  
+  const Display2 = () => {
+    return (
+      <div>
+        <h1>
+          Anectode with the most votes
+        </h1>
+      </div>
+    )
+  }
+
   const handleRandomClick = () => {
-    let index = 0
+    let index = Math.round(5 * Math.random(0,5))
     while (index === selected) {
       index = Math.round(5 * Math.random(0,5))
     }
@@ -21,7 +53,7 @@ const App = (props) => {
     setPoints(copy)
   }
 
-  const MaxVotes = (props) => {
+  const MaxVotes = () => {
     if (Math.max(...copy) === 0) {
       return (
         <div>
@@ -34,7 +66,7 @@ const App = (props) => {
       return (
         <div>
           <p>
-            {props.anecdotes[copy.indexOf(Math.max(...copy))]}
+            {anecdotes[copy.indexOf(Math.max(...copy))]}
           </p>
         </div>
       )
@@ -43,28 +75,15 @@ const App = (props) => {
   console.log("votes:", points)
   console.log("Max:", Math.max(...copy))
   console.log("Max Index:", copy.indexOf(Math.max(...copy)))
-  
+  console.log("index:", selected)
+
   return (
     <div>
-      <h1>
-        Anecdote of the day
-      </h1>
-      <p>
-        {props.anecdotes[selected]}
-      </p>
-      <p>
-        has {points[selected]} votes
-      </p>
-      <button onClick = {handleVote}>
-        vote
-      </button>
-      <button onClick = {handleRandomClick}>
-        next anecdote
-      </button>
-      <h1>
-        Anectode with the most votes
-      </h1>
-      <MaxVotes anecdotes = {props.anecdotes}/>
+      <Display1/>
+      <Button handleClick = {handleVote} text = "vote"/>
+      <Button handleClick = {handleRandomClick} text = "next anecdote"/>
+      <Display2/>
+      <MaxVotes/>
     </div>
   )
 }
@@ -78,4 +97,4 @@ const anecdotes = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
-ReactDOM.render(<App anecdotes={anecdotes}/>,document.getElementById('root'))
+ReactDOM.render(<App/>,document.getElementById('root'))
