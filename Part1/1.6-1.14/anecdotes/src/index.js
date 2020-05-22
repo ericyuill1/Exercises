@@ -4,15 +4,9 @@ import ReactDOM from 'react-dom'
 const App = (props) => {
 
   const [selected, setSelected] = useState(0)
+  const [points, setPoints] = useState(Array(6).fill(0))
 
-  const [ index0, setindex0 ] = useState(0)
-  const [ index1, setindex1 ] = useState(0)
-  const [ index2, setindex2 ] = useState(0)
-  const [ index3, setindex3 ] = useState(0)
-  const [ index4, setindex4 ] = useState(0)
-  const [ index5, setindex5 ] = useState(0)
-
-  const points = [index0, index1, index2, index3, index4, index5]
+  const copy = [...points]
 
   const handleRandomClick = () => {
     let index = 0
@@ -23,28 +17,12 @@ const App = (props) => {
   }
 
   const handleVote = () => {
-    if (selected === 0) {
-      setindex0(index0 + 1)
-    }
-    if (selected === 1) {
-      setindex1(index1 + 1)
-    }
-    if (selected === 2) {
-      setindex2(index2 + 1)
-    }
-    if (selected === 3) {
-      setindex3(index3 + 1)
-    }
-    if (selected === 4) {
-      setindex4(index4 + 1)
-    }
-    if (selected === 5) {
-      setindex5(index5 + 1)
-    }
+    copy[selected] += 1
+    setPoints(copy)
   }
 
   const MaxVotes = (props) => {
-    if (Math.max(...points) === 0) {
+    if (Math.max(...copy) === 0) {
       return (
         <div>
           <p>
@@ -56,15 +34,15 @@ const App = (props) => {
       return (
         <div>
           <p>
-            {props.anecdotes[points.indexOf(Math.max(...points))]}
+            {props.anecdotes[copy.indexOf(Math.max(...copy))]}
           </p>
         </div>
       )
-
   }
 
-  console.log("votes", points)
-  console.log("Max", points.indexOf(Math.max(...points)))
+  console.log("votes:", points)
+  console.log("Max:", Math.max(...copy))
+  console.log("Max Index:", copy.indexOf(Math.max(...copy)))
   
   return (
     <div>
