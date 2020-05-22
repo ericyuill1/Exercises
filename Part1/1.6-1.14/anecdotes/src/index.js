@@ -14,9 +14,8 @@ const App = (props) => {
 
   const points = [index0, index1, index2, index3, index4, index5]
 
-  let index = 0
-
   const handleRandomClick = () => {
+    let index = 0
     while (index === selected) {
       index = Math.round(5 * Math.random(0,5))
     }
@@ -44,10 +43,29 @@ const App = (props) => {
     }
   }
 
+  const MaxVotes = (props) => {
+    if (Math.max(...points) === 0) {
+      return (
+        <div>
+          <p>
+            No one has voted yet...
+          </p>
+        </div>
+      )
+    }
+      return (
+        <div>
+          <p>
+            {props.anecdotes[points.indexOf(Math.max(...points))]}
+          </p>
+        </div>
+      )
+
+  }
+
   console.log("votes", points)
   console.log("Max", points.indexOf(Math.max(...points)))
   
-
   return (
     <div>
       <h1>
@@ -68,9 +86,7 @@ const App = (props) => {
       <h1>
         Anectode with the most votes
       </h1>
-      <p>
-        {props.anecdotes[points.indexOf(Math.max(...points))]}
-      </p>
+      <MaxVotes anecdotes = {props.anecdotes}/>
     </div>
   )
 }
