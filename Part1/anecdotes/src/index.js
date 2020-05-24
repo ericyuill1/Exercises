@@ -7,7 +7,7 @@ const Button = (props) => (
   </button>
 )
 
-const App = () => {
+const App = (props) => {
 
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(Array(6).fill(0))
@@ -32,11 +32,9 @@ const App = () => {
   
   const Display2 = () => {
     return (
-      <div>
-        <h1>
-          Anectode with the most votes
-        </h1>
-      </div>
+      <h1>
+        Anectode with the most votes
+      </h1>
     )
   }
 
@@ -56,19 +54,15 @@ const App = () => {
   const MaxVotes = () => {
     if (Math.max(...copy) === 0) {
       return (
-        <div>
-          <p>
-            No one has voted yet...
-          </p>
-        </div>
+        <p>
+          No one has voted yet...
+        </p>
       )
     }
       return (
-        <div>
-          <p>
-            {anecdotes[copy.indexOf(Math.max(...copy))]}
-          </p>
-        </div>
+        <p>
+          {anecdotes[copy.indexOf(Math.max(...copy))]}
+        </p>
       )
   }
 
@@ -97,4 +91,4 @@ const anecdotes = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
-ReactDOM.render(<App/>,document.getElementById('root'))
+ReactDOM.render(<App anecdotes = {anecdotes}/>,document.getElementById('root'))
