@@ -21,7 +21,8 @@ const Statistic = (props) => {
 }
 
 const Statistics = (props) => {
-  if (props.good + props.neutral + props.bad === 0) {
+  let total = props.good + props.neutral + props.bad
+  if (total === 0) {
     return (
       <p>
         No feedback given
@@ -35,8 +36,8 @@ const Statistics = (props) => {
       <Statistic text = "neutral" value = {props.neutral}/>
       <Statistic text = "bad" value = {props.bad}/>
       <Statistic text = "all" value = {props.good + props.neutral + props.bad}/>
-      <Statistic text = "average" value = {(props.good + props.neutral + props.bad)/3}/>
-      <Statistic text = "positive" value = {props.good * 100 / (props.good + props.neutral + props.bad) + '%'}/>
+      <Statistic text = "average" value = {(props.good - props.bad) / total}/>
+      <Statistic text = "positive" value = {props.good * 100 / total + '%'}/>
     </table>
   )
 }

@@ -69,7 +69,6 @@ const App = (props) => {
   console.log("votes:", points)
   console.log("Max:", Math.max(...copy))
   console.log("Max Index:", copy.indexOf(Math.max(...copy)))
-  console.log("index:", selected)
 
   return (
     <div>
