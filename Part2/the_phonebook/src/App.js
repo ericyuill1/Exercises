@@ -40,19 +40,16 @@ const Persons = (props) => {
 
   const Note = ({ note }) => {
 
-  const [ persons, setPersons ] = useState([])
-
   const cease = () => {
+    //console.log(persons)
+
     if (window.confirm("Delete " + note.name + "?")) {
-      
+      console.log("to delete", note._id)
+      //console.log(persons)
         noteService
-          .rid(note.id)
+          .rid(note._id)
         noteService
           .getAll()
-          .then(response => {
-          setPersons(response.data)
-        })
-
         refreshPage()
         
       }
@@ -63,10 +60,19 @@ const Persons = (props) => {
 
   return (
     <div>
-      {note.name} {note.number}
-      <button onClick = {cease}>
-        delete
-      </button>
+      <tr>
+        <td>
+          {note.name}
+        </td>
+        <td>
+          <button onClick = {cease}>
+            delete
+          </button>
+        </td>
+      </tr>
+        {note.number}
+        <p>
+        </p>
     </div>
   )
 }
@@ -103,40 +109,41 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault()
     const checkPerson = (person) => person.name === newName
-    const checkNumber = (person) => person.number === newNumber
+    const checkNumber = (person) => person.number == newNumber
 
     const nameObject = {
       name: newName,
       number: newNumber,
       id: Math.max(persons.id) + 1
     }
+    console.log(persons)
+    console.log(persons.some(checkNumber))
+    if (persons.some(checkNumber)) {
+      window.alert(newNumber + ' is already in use')
+      setNewName('')
+      setNewNumber('')
+      return
+    }
 
     if (persons.some(checkPerson)) {
       const match = persons.filter(person => person.name.includes(newName))
       console.log("match", match)
-      console.log("match.id", match[0].id)
+      console.log("match.id", match[0]._id)
       if (window.confirm(newName + ' is already added to the phonebook, replace the old number with the new one?')) {
         
         const replaceObject = {
           name: match[0].name,
           number: newNumber,
-          id: match[0].id
+          id: match[0]._id
         }
 
+        console.log("replace", replaceObject)
+
         noteService
-          .update(match[0].id, replaceObject)
-          .catch(error => {
-            setErrorMessage(
-              `Information of ${newName} was already deleted from the server`
-            )
-            setTimeout(() => {
-              setAddMessage(null)
-              refreshPage()
-            }, 5000)
-            setNewName('')
-            setNewNumber('')
-            return
-            })
+          .rid(match[0]._id)
+        noteService
+          .create(replaceObject)
+      
             setAddMessage(
               `Updating ${nameObject.name}'s number`
             )
@@ -149,11 +156,12 @@ const App = () => {
         }
           
 
-    if (persons.some(checkNumber)) {
-      window.alert(newNumber + ' is already in use')
-      setNewNumber('')
-      return
-    }
+    // if (persons.some(checkNumber)) {
+    //   window.alert(newNumber + ' is already in use')
+    //   setNewName('')
+    //   setNewNumber('')
+    //   return
+    // }
     
     noteService
       .create(nameObject)
@@ -167,7 +175,16 @@ const App = () => {
         setTimeout(() => {
           setAddMessage(null)
         }, 5000)
-      })
+      }).catch(error => {
+        console.log(error)
+        setErrorMessage(
+          'Person validation failed: required name length: >2, required number length: >7'
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        })
+      
   }
 
   const handleNameChange = (event) => {
